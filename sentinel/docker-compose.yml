@@ -1,0 +1,18 @@
+version: '3.9'
+services:
+  sentinel:
+    image: redis:7.2-alpine
+    container_name: sentinel1
+    network_mode: host
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    restart: unless-stopped
+    volumes:
+      - ./conf/:/usr/local/etc/redis/
+      - ./sentinel_data/:/data/
+      - ./sentinel/:/var/lib/redis/
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "localhost", "-p", "26379", "-a", "Kipl1234", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+

@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    command: redis-server --include /usr/local/etc/redis/redis.conf
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis-data:/data
+      - ./logs:/var/log/redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "localhost", "-p", "6379", "-a", "Kipl1234", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
